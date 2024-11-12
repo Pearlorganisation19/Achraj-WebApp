@@ -31,10 +31,18 @@ class WebViewApp extends StatefulWidget {
 class _WebViewAppState extends State<WebViewApp> {
   late StreamSubscription<InternetStatus> listener;
   late final WebViewController controller;
-  bool isConnected = InternetConnection().internetStatus == InternetStatus.connected;
+  bool isConnected = true;
+  bool isReday =false;
 
   @override
   void initState() {
+    Future.delayed(Duration(seconds: 3),(){
+      setState(() {
+
+        isReday=true;
+      });
+    });
+
     super.initState();
     _startListening();
     controller = WebViewController()
@@ -55,9 +63,9 @@ class _WebViewAppState extends State<WebViewApp> {
         isConnected = status == InternetStatus.connected;
 
         if (isConnected) {
-          // Load the web view if connected
           loadWebView();
         }
+
       });
     });
   }
@@ -72,12 +80,12 @@ class _WebViewAppState extends State<WebViewApp> {
       statusBarColor: Colors.blueAccent, // Use your desired color here
       statusBarIconBrightness: Brightness.light, // Use Brightness.dark if your status bar icons are light-colored
     ));
+    print('isConnected: $isConnected');
     return Scaffold(
-      body: SafeArea(
+      body: isReday?SafeArea(
         child: isConnected
             ? RefreshIndicator(
           onRefresh: () async {
-            // Reload the WebView on refresh
             loadWebView();
           },
           child: WebViewStack(controller: controller),
@@ -85,7 +93,7 @@ class _WebViewAppState extends State<WebViewApp> {
             : const NoInternetPage(
           onRetry: null, // You can pass a retry function here
         ),
-      ),
+      ):Center(child: CircularProgressIndicator(),),
     );
   }
 }
