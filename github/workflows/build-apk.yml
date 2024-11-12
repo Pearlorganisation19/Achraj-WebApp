@@ -1,0 +1,54 @@
+name: Build and Upload APK
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+
+      - name: Install dependencies
+        run: |
+          flutter pub get
+
+      - name: Build release APK
+        run: |
+          flutter build apk --release
+
+      - name: Build debug APK
+        run: |
+          flutter build apk --debug
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: gh-cli/create-release@v1
+        with:
+          tag_name: 'v${{ github.run_number }}'  # Version the release based on the GitHub run number or a custom tag
+          release_name: 'Release v${{ github.run_number }}'
+          body: 'This is an automatically generated release with APKs.'
+
+      - name: Upload Release Assets
+        uses: gh-cli/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: build/app/outputs/flutter-apk/app-release.apk
+          asset_name: app-release.apk
+          asset_content_type: application/vnd.android.package-archive
+
+      - name: Upload Debug APK
+        uses: gh-cli/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: build/app/outputs/flutter-apk/app-debug.apk
+          asset_name: app-debug.apk
+          asset_content_type: application/vnd.android.package-archive
