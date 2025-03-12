@@ -1,4 +1,4 @@
-package com.vunum.jaifriend
+package com.vunum.Finstoff
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:JaiFriend/src/no_internet_page.dart';
-import 'package:JaiFriend/src/web_view_stack.dart';
+import 'package:Finstoff/src/no_internet_page.dart';
+import 'package:Finstoff/src/web_view_stack.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
@@ -36,7 +36,7 @@ class _WebViewAppState extends State<WebViewApp> {
     super.initState();
     controller = WebViewController()
       ..loadRequest(
-        Uri.parse('https://jaifriend.com/'),
+        Uri.parse('https://finstoff.com/'),
       );
     _startListening();
     _checkNavigationState();
@@ -60,7 +60,7 @@ class _WebViewAppState extends State<WebViewApp> {
   }
 
   void loadWebView() {
-    controller.loadRequest(Uri.parse('https://jaifriend.com/'));
+    controller.loadRequest(Uri.parse('https://finstoff.com/'));
   }
 
   void _checkNavigationState() async {
@@ -85,10 +85,10 @@ class _WebViewAppState extends State<WebViewApp> {
       },
       child: Splashify(
         navigateDuration: 4,
-        imagePath: "assets/icon/image.png",
-        backgroundColor: Colors.white,
+        imagePath: "assets/appstore.png",
+        backgroundColor: Colors.black,
         imageFadeIn: true,
-        imageSize: 400,
+        imageSize: 300,
         child: Scaffold(
           body: SafeArea(
             child: isConnected
